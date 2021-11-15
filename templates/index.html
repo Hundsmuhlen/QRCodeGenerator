@@ -7,11 +7,21 @@
     <title>QR Code generator</title>
 </head>
 <body>
-    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <h1 class="display-2 text-center">
-            Willkommen beim QR code generator
-        </h1>
-        {% block body %} {% endblock %}
+    <h1 class="display-2 text-center">
+        Willkommen beim QR code generator
+    </h1>
+    <br>
+    <div class="row d-flex justify-content-center">
+        <form method="GET" action="/qr" class="form-inline">
+            <div class="form-group col-4 mx-auto mb-2 mt-2">
+                <input type="text" name="data" placeholder="URL eingeben" class="form-control mx-auto text-center" autofocus>
+            </div>
+            <div class="col-4 mx-auto mb-3 mt-3 text-center">
+                <button class="btn btn-primary" type="submit">Submit </button>
+            </div>
+        </form>
+
+        {% block image %} {% endblock %}
     </div>
 
 

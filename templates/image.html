@@ -1,4 +1,10 @@
 {% extends "index.html" %}
-{% block body %}
-    <img class="col-6 mx-auto" src={{ image_file}} >
+{% block image %}
+
+    <form method="post" action="/downloadQR" class="form-inline">
+        <div class="col-4 mx-auto text-center">
+         <button class="btn btn-primary" name="data" value="{{ data }}" type="submit">Download {{ data }}</button>
+        </div>
+    </form>
+    <img class="col-6 mx-auto text-center" src={{ image_file }} >
 {% endblock %}
