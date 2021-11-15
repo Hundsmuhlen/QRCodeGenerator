@@ -8,27 +8,26 @@ app = Flask(__name__, static_folder='static')
 
 @app.route('/')
 def hello_world():
-    return render_template("input.html")
+    return render_template("index.html")
 
-@app.route('/qr', methods=["POST"])
+@app.route('/qr', methods=["GET", "POST"])
 def showQR():
-    data = request.form.get("data", "")
-    print(f"DATA = {data}")
+    if request.method == "GET":
+        data = request.args.get("data", "")
+    else:
+        return render_template("index.html")
 
-    image_file = makeQR(data)
-    #Todo: Download funktion. Irgendwo muss gespeichert werden, was der Nutzer eigegeben hat, sonst lädt er das falsche Bild herunter
-    resp = make_response(render_template("input.html", image_file=image_file))
+    image_file, name = makeQR(data)
+    resp = make_response(render_template("image.html", image_file=image_file, data=data))
     resp.set_cookie("URL", data)
 
     return resp
-    #return send_file(as_attachment=True, path_or_file=path)
-    #return send_file(img, as_attachment=True, mimetype="image/png", download_name="yourQRCode.png")
 
-@app.route("/downloadqr", methods=["POST"])
+@app.route("/downloadQR", methods=["GET", "POST"])
 def downloadQR():
-    data = request.cookies.get("URL")
-    image_file = makeQR(data)
-    return send_file(as_attachment=True, path_or_file=image_file)
+    data = request.form.get("data")
+    image_file, name = makeQR(data)
+    return send_from_directory(directory="static", path=name, as_attachment=True)
 
 def makeQR(data):
     qr = qrcode.QRCode(
@@ -47,7 +46,7 @@ def makeQR(data):
 
     img.save(path)
     image_file = url_for('static', filename=name)
-    return image_file
+    return image_file, name
 
 if __name__ == '__main__':
     app.run()
