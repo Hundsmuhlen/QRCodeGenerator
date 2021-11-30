@@ -1,4 +1,4 @@
-from flask import Flask, send_file, request, send_from_directory, render_template, url_for, make_response
+from flask import Flask, request, send_from_directory, render_template, url_for, make_response
 import qrcode
 import os
 
@@ -7,7 +7,7 @@ app = Flask(__name__, static_folder='static')
 
 
 @app.route('/')
-def hello_world():
+def home():
     return render_template("index.html")
 
 @app.route('/qr', methods=["GET", "POST"])
@@ -19,7 +19,6 @@ def showQR():
 
     image_file, name = makeQR(data)
     resp = make_response(render_template("image.html", image_file=image_file, data=data))
-    resp.set_cookie("URL", data)
 
     return resp
 
@@ -34,7 +33,7 @@ def makeQR(data):
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
-        border=4,
+        border=2,
     )
     qr.add_data(data)
     qr.make(fit=True)
